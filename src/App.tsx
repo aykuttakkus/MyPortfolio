@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Phone, Mail, Github, Linkedin, Instagram, MapPin, ExternalLink, Code2, Brain, Terminal, Database } from 'lucide-react';
+import { Phone, Mail, Github, Linkedin, Instagram, MapPin, ExternalLink, Lightbulb, Layout, Server, Brain, Database } from 'lucide-react';
 
 function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -12,7 +12,7 @@ function MatrixRain() {
     if (!ctx) return;
 
     canvas.width = window.innerWidth;
-    canvas.height = document.documentElement.scrollHeight;
+    canvas.height = window.innerHeight;
 
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
@@ -22,6 +22,8 @@ function MatrixRain() {
     ctx.font = `${fontSize}px monospace`;
 
     function draw() {
+      if (!ctx || !canvas) return;
+      
       ctx.fillStyle = 'rgba(18, 18, 18, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -45,17 +47,16 @@ function MatrixRain() {
     const interval = setInterval(draw, 100);
 
     const handleResize = () => {
+      if (!canvas) return;
       canvas.width = window.innerWidth;
-      canvas.height = document.documentElement.scrollHeight;
+      canvas.height = window.innerHeight;
     };
 
     window.addEventListener('resize', handleResize);
-    document.addEventListener('scroll', handleResize);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('resize', handleResize);
-      document.removeEventListener('scroll', handleResize);
     };
   }, []);
 
@@ -72,13 +73,15 @@ function HomePage() {
   return (
     <div className="relative z-10 min-h-screen pt-24 px-4">
       <div className="max-w-4xl mx-auto text-center text-white">
-        <img 
-          src="https://i.imgur.com/sCNG5qg.png" 
-          alt="Profile" 
-          className="mx-auto mb-4 w-80 h-80 object-contain fade-in-illustration"
-        />
+        <div className="flex justify-center items-center mb-4">
+          <img 
+            src="https://i.imgur.com/sCNG5qg.png" 
+            alt="Profile" 
+            className="w-80 h-80 object-contain fade-in-illustration"
+          />
+        </div>
         <h1 className="text-6xl font-bold mb-6"></h1>
-        <p className="text-4xl mb-8">Building the Next Ce...</p>
+        <p className="text-4xl mb-8">Dream BIG. Play BIGGER. Because LIMITS? Just LIES.</p>
         <div className="flex justify-center space-x-8">
           <a href="https://github.com/aykuttakkus" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
             <Github className="w-12 h-12" />
@@ -99,16 +102,13 @@ function AboutPage() {
         <h1 className="text-3xl font-bold mb-6">About Me</h1>
         <div className="space-y-4 leading-relaxed">
           <p>
-            I'm Aykut, a software engineer aspiring to become the CEO of my own company. Currently, I'm creating my own projects and generating innovative ideas to achieve this goal.
+            I'm Aykut, a software engineer who wants to create my own game. To achieve this goal, I develop my own projects and come up with innovative ideas. I've been playing MMORPG, MOBA, tactical FPS, sports, open-world action-adventure, and RTS games since childhood.
           </p>
           <p>
-            To briefly introduce myself: during the first two years of university, I worked in the bar industry, managing various events both within and outside the city in collaboration with companies like Zorlu and RedBull.
+            To briefly introduce myself: During the first two years of university, I worked in the bar industry and gained valuable experience by working with companies like Zorlu and Red Bull. Later, I focused more on software development and started building projects aligned with my goal of launching my own venture.
           </p>
           <p>
-            At the beginning of this year, I left the bar industry to fully focus on my studies. This year, I was working on a project for TEKNOFEST with the Quantum Dynamics Club; however, due to some disagreements, I parted ways with the club as of March 13.
-          </p>
-          <p>
-            I view all my experiences as steps toward becoming a CEO. My contact information is available on my website.
+            I don't see games only as a player. I'm also interested in the systems, mechanics, and logic behind them. With this perspective, I'm focused on developing my own games.
           </p>
         </div>
       </div>
@@ -119,46 +119,55 @@ function AboutPage() {
 function SkillsPage() {
   const skills = [
     {
-      category: "Programming Languages",
-      icon: <Code2 className="w-8 h-8 mb-4" />,
-      items: ["Python", "C++"],
+      category: "Product",
+      icon: <Lightbulb className="w-8 h-8 mb-4" />,
+      items: ["Creative Problem Solving", "Clean UI", "Reliable APIs", "Practical AI"],
       description: ""
     },
     {
-      category: "AI & Machine Learning",
+      category: "Frontend",
+      icon: <Layout className="w-8 h-8 mb-4" />,
+      items: ["React", "Vite", "Tailwind CSS", "Figma to UI"],
+      description: ""
+    },
+    {
+      category: "Backend",
+      icon: <Server className="w-8 h-8 mb-4" />,
+      items: ["Node.js", "Express.js", "REST APIs", "MongoDB", "JWT"],
+      description: ""
+    },
+    {
+      category: "Computer Vision / AI",
       icon: <Brain className="w-8 h-8 mb-4" />,
-      items: ["Claude", "Cursor", "Bolt"],
+      items: ["Python", "OpenCV", "YOLO"],
       description: ""
     },
     {
-      category: "Algorithms",
-      icon: <Terminal className="w-8 h-8 mb-4" />,
-      items: ["OpenCV", "Pandas", "Matplotlib"],
-      description: ""
-    },
-    {
-      category: "Databases",
+      category: "Data",
       icon: <Database className="w-8 h-8 mb-4" />,
-      items: ["SQL"],
+      items: ["SQL", "NumPy", "Matplotlib"],
       description: ""
     }
   ];
 
   return (
-    <div className="relative z-10 min-h-screen pt-24 px-4">
+    <div className="relative z-10 min-h-screen pt-24 px-4 pb-24">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-white mb-16">My Skills</h1>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skills.map((skill, index) => (
-            <div key={index} className="bg-black/80 backdrop-blur-sm rounded-lg p-6 text-white">
+            <div 
+              key={index} 
+              className="bg-black/90 backdrop-blur-sm rounded-xl p-6 text-white border border-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl"
+            >
               <div className="flex flex-col items-center mb-4">
                 {skill.icon}
                 <h3 className="text-xl font-bold mb-2">{skill.category}</h3>
               </div>
-              <p className="text-gray-300 text-center mb-4">{skill.description}</p>
+              <p className="text-gray-400 text-center mb-4">{skill.description}</p>
               <div className="space-y-2">
                 {skill.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-white/10 rounded-lg px-4 py-2 text-center">
+                  <div key={itemIndex} className="bg-white/10 rounded-full px-4 py-2 text-center text-white/80 border border-white/20 hover:bg-white/20 transition-colors">
                     {item}
                   </div>
                 ))}
@@ -174,21 +183,33 @@ function SkillsPage() {
 function ProjectsPage() {
   const projects = [
     {
-      title: "Parking Space Counter Project",
+      title: "UFC Website",
       description: "",
-      image: "https://i.imgur.com/pyFxiKT.jpeg",
-      tags: ["Python", "OpenCV"]
+      image: "https://i.imgur.com/aQd979y.png",
+      tags: ["React", "Node.js", "REST API", "MongoDB", "Cheerio", "Swagger", "Helmet"]
+    },
+    {
+      title: "HafizAI Game",
+      description: "",
+      image: "https://i.imgur.com/Uzq6a7x.png",
+      tags: ["Flutter", "Dart", "Cursor", "LeonardoAI"]
     },
     {
       title: "Real-time Movement Chart for GPS-free Drone",
       description: "",
       image: "https://i.imgur.com/RvS9NNQ.png",
       tags: ["Python", "OpenCV", "Pandas", "Os", "Time", "Matplotlib"]
+    },
+    {
+      title: "Parking Space Counter Project",
+      description: "",
+      image: "https://i.imgur.com/pyFxiKT.jpeg",
+      tags: ["Python", "OpenCV"]
     }
   ];
 
   return (
-    <div className="relative z-10 min-h-screen pt-24 px-4">
+    <div className="relative z-10 min-h-screen pt-24 px-4 pb-24">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-12 text-white text-center">My Projects</h1>
         <div 
@@ -200,14 +221,20 @@ function ProjectsPage() {
           }}
         >
           {projects.map((project, index) => (
-            <div key={index} className="bg-black/80 backdrop-blur-sm rounded-lg overflow-hidden">
-              <img src={project.image} alt={project.title} className="w-full h-48 object-cover" />
+            <div 
+              key={index} 
+              className="bg-black/90 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl"
+            >
+              <div className="relative">
+                <img src={project.image} alt={project.title} className="w-full h-64 object-contain bg-black" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+              </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-                <p className="text-gray-300 mb-4">{project.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
+                <p className="text-gray-400 mb-4">{project.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag, tagIndex) => (
-                    <span key={tagIndex} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
+                    <span key={tagIndex} className="px-3 py-1 bg-white/10 text-white/80 rounded-full text-sm border border-white/20 hover:bg-white/20 transition-colors">
                       {tag}
                     </span>
                   ))}
@@ -264,7 +291,7 @@ function ContactPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-4 p-3">
                 <Mail className="w-6 h-6 flex-shrink-0" />
-                <span className="text-lg break-all">aykuttbusiness@hotmail.com</span>
+                <span className="text-lg break-all">aykutk.akkus@gmail.com</span>
               </div>
               <div className="flex items-center space-x-4 p-3">
                 <Phone className="w-6 h-6 flex-shrink-0" />
@@ -289,29 +316,29 @@ function ContactPage() {
   );
 }
 
-function NavigationMenu({ currentPage, setCurrentPage }) {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+interface NavigationMenuProps {
+  currentPage: string;
+  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function NavigationMenu({ currentPage, setCurrentPage }: NavigationMenuProps) {
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   const sections = {
     'Home': {
-      title: 'Home',
-      content: 'Welcome'
+      title: 'Home'
     },
     'About': {
-      title: 'About',
-      content: 'Who Am I?'
+      title: 'About'
     },
     'Skills': {
-      title: 'Skills',
-      content: 'My Expertise'
+      title: 'Skills'
     },
     'Projects': {
-      title: 'Projects',
-      content: 'My Work'
+      title: 'Projects'
     },
     'Contact': {
-      title: 'Contact',
-      content: 'Get in Touch'
+      title: 'Contact'
     }
   };
 
@@ -323,41 +350,72 @@ function NavigationMenu({ currentPage, setCurrentPage }) {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-sm">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-white/10">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <img 
               src="https://i.imgur.com/ld0DQZL.png" 
               alt="Logo" 
-              className="h-8 w-auto mr-6 md:h-10"
+              className="h-8 w-auto mr-6 md:h-10 transition-transform duration-300 hover:scale-110"
             />
           </div>
           <div className="flex-1 flex justify-center space-x-8">
-            {Object.entries(sections).map(([key, section]) => (
-              <div
-                key={key}
-                className="relative group"
-                onMouseEnter={() => setActiveSection(key)}
-                onMouseLeave={() => setActiveSection(null)}
-              >
-                <button 
-                  className="relative px-6 py-2 text-white overflow-hidden group"
-                  onClick={() => handlePageChange(key)}
+            {Object.entries(sections).map(([key, section]) => {
+              const isActive = currentPage === key;
+              const isHovered = hoveredButton === key;
+
+              return (
+                <div
+                  key={key}
+                  className="relative group"
+                  onMouseEnter={() => {
+                    setHoveredButton(key);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredButton(null);
+                  }}
                 >
-                  <span className="absolute inset-x-0 h-[1px] bottom-0 bg-white transform origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100"></span>
-                  <span className="absolute inset-x-0 h-[1px] top-0 bg-white transform origin-right scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100"></span>
-                  <span className="absolute inset-y-0 w-[1px] right-0 bg-white transform origin-bottom scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"></span>
-                  <span className="absolute inset-y-0 w-[1px] left-0 bg-white transform origin-top scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"></span>
-                  {section.title}
-                </button>
-                {activeSection === key && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-64 bg-black/90 backdrop-blur-md rounded-lg shadow-xl p-4 mt-2">
-                    <div className="text-white text-center">{section.content}</div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  <button 
+                    className={`relative px-6 py-2 text-white transition-all duration-300 overflow-visible ${
+                      isActive ? 'text-blue-400' : 'hover:text-blue-300'
+                    }`}
+                    onClick={() => handlePageChange(key)}
+                  >
+                    {/* Tüm butonlar için modern hover efekti */}
+                    <span 
+                      className={`absolute inset-x-0 h-[2px] bottom-0 bg-gradient-to-r from-transparent via-white to-transparent transform origin-left transition-all duration-500 ${
+                        isHovered ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+                      }`}
+                    />
+                    <span 
+                      className={`absolute inset-x-0 h-[2px] top-0 bg-gradient-to-r from-transparent via-white to-transparent transform origin-right transition-all duration-500 delay-150 ${
+                        isHovered ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+                      }`}
+                    />
+                    <span 
+                      className={`absolute inset-y-0 w-[2px] right-0 bg-gradient-to-b from-transparent via-white to-transparent transform origin-bottom transition-all duration-500 delay-75 ${
+                        isHovered ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'
+                      }`}
+                    />
+                    <span 
+                      className={`absolute inset-y-0 w-[2px] left-0 bg-gradient-to-b from-transparent via-white to-transparent transform origin-top transition-all duration-500 delay-225 ${
+                        isHovered ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'
+                      }`}
+                    />
+
+                    {/* Aktif sayfa için alt çizgi - beyaz ve ince */}
+                    {isActive && (
+                      <span className="absolute inset-x-0 h-[1px] bottom-0 bg-white" />
+                    )}
+
+                    <span className="relative z-10 font-medium tracking-wide">
+                      {section.title}
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -365,7 +423,12 @@ function NavigationMenu({ currentPage, setCurrentPage }) {
   );
 }
 
-function PageTransition({ children, isVisible }) {
+interface PageTransitionProps {
+  children: React.ReactNode;
+  isVisible: boolean;
+}
+
+function PageTransition({ children, isVisible }: PageTransitionProps) {
   return (
     <div
       className={`transition-opacity duration-500 ease-in-out absolute w-full ${
