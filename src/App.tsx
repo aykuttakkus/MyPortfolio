@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Phone, Mail, Github, Linkedin, Instagram, MapPin, ExternalLink, Lightbulb, Layout, Server, Brain, Database } from 'lucide-react';
+import { Phone, Mail, Github, Linkedin, Instagram, MapPin, ExternalLink, Lightbulb, Layout, Server, Brain, Database, Gamepad2, Play, X } from 'lucide-react';
 
 function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -248,6 +248,126 @@ function ProjectsPage() {
   );
 }
 
+interface GameModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  gameUrl: string;
+  gameTitle: string;
+}
+
+function GameModal({ isOpen, onClose, gameUrl, gameTitle }: GameModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+      <div className="relative w-full max-w-5xl mx-4">
+        <div className="bg-black/95 rounded-xl border border-white/20 overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-white/10">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <Gamepad2 className="w-6 h-6" />
+              {gameTitle}
+            </h3>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="relative" style={{ paddingBottom: '62.5%' }}>
+            <iframe
+              src={gameUrl}
+              title={gameTitle}
+              className="absolute inset-0 w-full h-full"
+              allow="fullscreen"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GamesPage() {
+  const [selectedGame, setSelectedGame] = useState<{ url: string; title: string } | null>(null);
+
+  const games = [
+    {
+      title: "Ball Launcher",
+      description: "A fun physics-based slingshot game where you launch balls to hit targets. Built with Unity.",
+      image: "https://i.imgur.com/x3Qq5k2.png",
+      tags: ["Unity", "C#", "Physics", "WebGL", "Android", "iOS"],
+      demoUrl: "/demos/slingshot/Ball Launcher/index.html"
+    }
+  ];
+
+  return (
+    <>
+      <div className="relative z-10 min-h-screen pt-24 px-4 pb-24">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold mb-12 text-white text-center">My Games</h1>
+          <div 
+            className="grid gap-8 justify-center"
+            style={{
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 350px), 1fr))',
+              maxWidth: `${Math.min(games.length, 3) * 384}px`,
+              margin: '0 auto'
+            }}
+          >
+            {games.map((game, index) => (
+              <div 
+                key={index} 
+                className="bg-black/90 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-2xl"
+              >
+                <div 
+                  className="relative group cursor-pointer"
+                  onClick={() => setSelectedGame({ url: game.demoUrl, title: game.title })}
+                >
+                  <img src={game.image} alt={game.title} className="w-full h-64 object-contain bg-black transition-all duration-300 group-hover:scale-105 group-hover:brightness-50" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-black/50">
+                      <Play className="w-7 h-7 text-white ml-1" fill="white" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-3">{game.title}</h3>
+                  <p className="text-gray-400 mb-4">{game.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {game.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex} className="px-3 py-1 bg-white/10 text-white/80 rounded-full text-sm border border-white/20 hover:bg-white/20 transition-colors">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <GameModal
+        isOpen={selectedGame !== null}
+        onClose={() => setSelectedGame(null)}
+        gameUrl={selectedGame?.url || ''}
+        gameTitle={selectedGame?.title || ''}
+      />
+    </>
+  );
+}
+
 function ContactPage() {
   return (
     <div className="relative z-10 min-h-screen pt-24 px-4">
@@ -336,6 +456,9 @@ function NavigationMenu({ currentPage, setCurrentPage }: NavigationMenuProps) {
     },
     'Projects': {
       title: 'Projects'
+    },
+    'Games': {
+      title: 'Games'
     },
     'Contact': {
       title: 'Contact'
@@ -469,6 +592,8 @@ function App() {
         return <SkillsPage />;
       case 'Projects':
         return <ProjectsPage />;
+      case 'Games':
+        return <GamesPage />;
       case 'Contact':
         return <ContactPage />;
       default:
