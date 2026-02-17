@@ -253,9 +253,10 @@ interface GameModalProps {
   onClose: () => void;
   gameUrl: string;
   gameTitle: string;
+  aspectRatio?: '16:10' | '9:16';
 }
 
-function GameModal({ isOpen, onClose, gameUrl, gameTitle }: GameModalProps) {
+function GameModal({ isOpen, onClose, gameUrl, gameTitle, aspectRatio = '16:10' }: GameModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -269,11 +270,13 @@ function GameModal({ isOpen, onClose, gameUrl, gameTitle }: GameModalProps) {
 
   if (!isOpen) return null;
 
+  const isPortrait = aspectRatio === '9:16';
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-      <div className="relative w-full max-w-5xl mx-4">
-        <div className="bg-black/95 rounded-xl border border-white/20 overflow-hidden">
-          <div className="flex items-center justify-between p-4 border-b border-white/10">
+      <div className={`relative mx-4 ${isPortrait ? 'w-[500px]' : 'w-full max-w-5xl'}`} style={isPortrait ? { height: '95vh' } : undefined}>
+        <div className="bg-black/95 rounded-xl border border-white/20 overflow-hidden h-full flex flex-col">
+          <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
             <h3 className="text-xl font-bold text-white flex items-center gap-2">
               <Gamepad2 className="w-6 h-6" />
               {gameTitle}
@@ -285,14 +288,26 @@ function GameModal({ isOpen, onClose, gameUrl, gameTitle }: GameModalProps) {
               <X className="w-6 h-6" />
             </button>
           </div>
-          <div className="relative" style={{ paddingBottom: '62.5%' }}>
-            <iframe
-              src={gameUrl}
-              title={gameTitle}
-              className="absolute inset-0 w-full h-full"
-              allow="fullscreen"
-            />
-          </div>
+          {isPortrait ? (
+            <div className="flex-1 min-h-0 flex items-center justify-center bg-black p-2">
+              <iframe
+                src={gameUrl}
+                title={gameTitle}
+                className="border-0 h-full"
+                style={{ aspectRatio: '1170/2532' }}
+                allow="fullscreen"
+              />
+            </div>
+          ) : (
+            <div className="relative" style={{ paddingBottom: '62.5%' }}>
+              <iframe
+                src={gameUrl}
+                title={gameTitle}
+                className="absolute inset-0 w-full h-full"
+                allow="fullscreen"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -300,7 +315,7 @@ function GameModal({ isOpen, onClose, gameUrl, gameTitle }: GameModalProps) {
 }
 
 function GamesPage() {
-  const [selectedGame, setSelectedGame] = useState<{ url: string; title: string } | null>(null);
+  const [selectedGame, setSelectedGame] = useState<{ url: string; title: string; aspectRatio?: '16:10' | '9:16' } | null>(null);
 
   const games = [
     {
@@ -308,7 +323,16 @@ function GamesPage() {
       description: "A fun physics-based slingshot game where you launch balls to hit targets. Built with Unity.",
       image: "https://i.imgur.com/x3Qq5k2.png",
       tags: ["Unity", "C#", "Physics", "WebGL", "Android", "iOS"],
-      demoUrl: "/demos/slingshot/Ball Launcher/index.html"
+      demoUrl: "/demos/slingshot/Ball Launcher/index.html",
+      aspectRatio: '16:10' as const
+    },
+    {
+      title: "Polygon Racer",
+      description: "A low-poly driving game where you race through roads and avoid obstacles. Built with Unity.",
+      image: "https://i.imgur.com/bwKwsZh.png",
+      tags: ["Unity", "C#", "Racing", "WebGL", "Android", "iOS"],
+      demoUrl: "/demos/polygon-racer/Simple Driving/index.html",
+      aspectRatio: '9:16' as const
     }
   ];
 
@@ -332,9 +356,9 @@ function GamesPage() {
               >
                 <div 
                   className="relative group cursor-pointer"
-                  onClick={() => setSelectedGame({ url: game.demoUrl, title: game.title })}
+                  onClick={() => setSelectedGame({ url: game.demoUrl, title: game.title, aspectRatio: game.aspectRatio })}
                 >
-                  <img src={game.image} alt={game.title} className="w-full h-64 object-contain bg-black transition-all duration-300 group-hover:scale-105 group-hover:brightness-50" />
+                  <img src={game.image} alt={game.title} className={`w-full object-contain bg-black transition-all duration-300 group-hover:scale-105 group-hover:brightness-50 ${game.aspectRatio === '9:16' ? 'h-80' : 'h-64'}`} />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300 shadow-lg shadow-black/50">
@@ -363,6 +387,7 @@ function GamesPage() {
         onClose={() => setSelectedGame(null)}
         gameUrl={selectedGame?.url || ''}
         gameTitle={selectedGame?.title || ''}
+        aspectRatio={selectedGame?.aspectRatio}
       />
     </>
   );
