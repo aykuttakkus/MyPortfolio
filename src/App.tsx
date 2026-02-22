@@ -126,11 +126,11 @@ const games = [
   {
     title: 'HafizAI Game',
     description: 'Mobil oyun fikrini hızlı prototipe dönüştüren deneysel ürün çalışması.',
-    demoUrl: '#',
     image: 'https://i.imgur.com/Uzq6a7x.png',
-    tags: ['Flutter', 'Dart', 'AI Tools'],
+    tags: ['Flutter', 'Dart', 'LeonardoAI'],
     aspectRatio: '16:10' as const,
     imageFit: 'contain' as const,
+    playable: false,
   },
 ];
 
@@ -403,58 +403,71 @@ function App() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {games.map((game) => (
-                <button
-                  key={game.title}
-                  type="button"
-                  onClick={() =>
-                    setSelectedGame({
-                      title: game.title,
-                      demoUrl: game.demoUrl,
-                      aspectRatio: game.aspectRatio,
-                    })
-                  }
-                  className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition hover:border-white/25 hover:bg-white/[0.035]"
-                >
-                  <div className="aspect-[16/10] relative overflow-hidden border-b border-white/10 bg-black">
-                    <img
-                      src={game.image}
-                      alt={game.title}
-                      className={`h-full w-full bg-black object-center transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95 ${
-                        game.aspectRatio === '9:16' || (game as { imageFit?: string }).imageFit === 'contain'
-                          ? 'object-contain p-2'
-                          : 'object-cover'
-                      }`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm">
-                        <Play className="ml-0.5 h-6 w-6 text-white" fill="white" />
+              {games.map((game) => {
+                const isPlayable = (game as { playable?: boolean }).playable !== false;
+                const CardWrapper = isPlayable ? 'button' : 'div';
+                const cardProps = isPlayable
+                  ? {
+                      type: 'button' as const,
+                      onClick: () =>
+                        setSelectedGame({
+                          title: game.title,
+                          demoUrl: (game as { demoUrl: string }).demoUrl,
+                          aspectRatio: game.aspectRatio,
+                        }),
+                      className:
+                        'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition hover:border-white/25 hover:bg-white/[0.035]',
+                    }
+                  : {
+                      className:
+                        'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition',
+                    };
+                return (
+                  <CardWrapper key={game.title} {...cardProps}>
+                    <div className="aspect-[16/10] relative overflow-hidden border-b border-white/10 bg-black">
+                      <img
+                        src={game.image}
+                        alt={game.title}
+                        className={`h-full w-full bg-black object-center transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95 ${
+                          game.aspectRatio === '9:16' || (game as { imageFit?: string }).imageFit === 'contain'
+                            ? 'object-contain p-2'
+                            : 'object-cover'
+                        }`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      {isPlayable && (
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm">
+                            <Play className="ml-0.5 h-6 w-6 text-white" fill="white" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 text-white">
+                          <Gamepad2 className="h-4 w-4 text-emerald-300" />
+                          <h3 className="text-lg font-semibold">{game.title}</h3>
+                        </div>
+                        {isPlayable && (
+                          <ExternalLink className="h-4 w-4 shrink-0 text-white/45 transition group-hover:text-white" />
+                        )}
+                      </div>
+                      <p className="text-sm leading-6 text-white/65">{game.description}</p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {game.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75"
+                          >
+                            {tag}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                  </div>
-                  <div className="p-5">
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2 text-white">
-                        <Gamepad2 className="h-4 w-4 text-emerald-300" />
-                        <h3 className="text-lg font-semibold">{game.title}</h3>
-                      </div>
-                      <ExternalLink className="h-4 w-4 shrink-0 text-white/45 transition group-hover:text-white" />
-                    </div>
-                    <p className="text-sm leading-6 text-white/65">{game.description}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {game.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </button>
-              ))}
+                  </CardWrapper>
+                );
+              })}
             </div>
           </section>
         )}
