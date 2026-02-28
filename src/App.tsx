@@ -36,7 +36,7 @@ function MatrixRainHero() {
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      fontSize = window.innerWidth < 768 ? 12 : 14;
+      fontSize = window.innerWidth < 768 ? 12 : window.innerWidth < 1280 ? 14 : 16;
       columns = Math.floor(canvas.width / fontSize);
       drops = new Array(columns).fill(1);
       ctx.font = `${fontSize}px monospace`;
@@ -54,7 +54,7 @@ function MatrixRainHero() {
           const x = i * fontSize;
           const y = drops[i] * fontSize;
 
-          ctx.fillStyle = i % 9 === 0 ? 'rgba(120, 255, 200, 0.85)' : 'rgba(255, 255, 255, 0.55)';
+          ctx.fillStyle = i % 9 === 0 ? 'rgba(34, 197, 94, 0.9)' : 'rgba(255, 255, 255, 0.55)';
           ctx.fillText(text, x, y);
 
           if (y > canvas.height && Math.random() > 0.975) {
@@ -182,7 +182,7 @@ function GameModal({ isOpen, onClose, gameTitle, gameUrl, aspectRatio }: GameMod
       >
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
           <div className="flex items-center gap-2">
-            <Gamepad2 className="h-4 w-4 text-emerald-300" />
+            <Gamepad2 className="h-4 w-4 text-[var(--accent-green)]" />
             <h3 className="text-sm font-medium text-white">{gameTitle}</h3>
           </div>
           <button
@@ -227,14 +227,18 @@ function App() {
     aspectRatio: GameAspectRatio;
   }>(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [page]);
+
   return (
     <div className="min-h-screen bg-[#050505] text-white">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/75 backdrop-blur-xl">
-        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
+        <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6 lg:max-w-7xl lg:px-8 xl:px-10 2xl:max-w-[90rem] 2xl:px-12">
           <button
             type="button"
             onClick={() => setPage('home')}
-            className="inline-flex items-center text-sm font-medium tracking-[0.08em] text-emerald-300/90 transition hover:text-emerald-200"
+            className="inline-flex items-center text-sm font-medium tracking-[0.08em] text-[var(--accent-green)] transition hover:text-[var(--accent-green-hover)]"
             aria-label="Ana sayfa"
           >
             <span className="font-mono">{'> levelup'}</span>
@@ -284,18 +288,18 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/70 to-[#050505]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%),radial-gradient(circle_at_80%_20%,rgba(0,255,170,0.08),transparent_35%)]" />
 
-            <div className="relative mx-auto flex min-h-[66vh] w-full max-w-6xl items-end px-4 pb-12 pt-16 sm:px-6 sm:pb-16">
-              <div className="max-w-3xl">
-                <p className="mb-5 text-xs font-medium tracking-[0.24em] text-emerald-300/90">
+            <div className="relative mx-auto flex min-h-[66vh] w-full max-w-6xl items-end px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-20 lg:max-w-7xl lg:min-h-[72vh] lg:pb-20 lg:pt-20 xl:min-h-[75vh] xl:pb-24 xl:pt-24 2xl:max-w-[90rem] 2xl:min-h-[78vh] 2xl:px-12 2xl:pb-28 2xl:pt-28">
+              <div className="max-w-3xl xl:max-w-4xl">
+                <p className="mb-5 text-xs font-medium tracking-[0.24em] text-[var(--accent-green)] sm:text-sm lg:mb-6 lg:text-sm">
                   YAZILIM MÜHENDİSİ • OYUN GELİŞTİRİCİ
                 </p>
-                <h1 className="text-4xl font-semibold leading-tight text-white sm:text-6xl sm:leading-[1.02]">
+                <h1 className="text-4xl font-semibold leading-tight text-white sm:text-6xl sm:leading-[1.02] lg:text-7xl xl:text-[4.25rem] 2xl:text-[5rem] 2xl:leading-[1.05]">
                   Ben Aykut Kayra Akkus.
                 </h1>
-                <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/72 sm:text-lg">
+                <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/72 sm:text-lg lg:mt-8 lg:max-w-2xl lg:text-xl xl:max-w-3xl 2xl:text-[1.25rem]">
                   Kendi projelerini geliştiren bir yazılım mühendisliği öğrencisiyim. Web uygulamaları, backend servisleri ve oyun prototipleri üzerinde sade, çalışır ve kullanıcı odaklı ürünler geliştiriyorum.
                 </p>
-                <div className="mt-8 flex flex-wrap items-center gap-3">
+                <div className="mt-8 flex flex-wrap items-center gap-3 lg:mt-10 lg:gap-4 xl:mt-12">
                   <button
                     type="button"
                     onClick={() => setPage('projects')}
@@ -317,26 +321,26 @@ function App() {
         )}
 
         {page === 'projects' && (
-          <section id="projects" className="border-b border-white/10">
-            <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
-              <div className="mb-10">
+          <section id="projects" className="min-h-[80vh] border-b border-white/10 lg:min-h-[85vh] 2xl:min-h-[88vh]">
+            <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:max-w-7xl lg:px-8 lg:py-20 lg:pt-24 xl:px-10 xl:py-24 xl:pt-28 2xl:max-w-[90rem] 2xl:px-12 2xl:py-28 2xl:pt-32">
+              <div className="mb-8 lg:mb-10 xl:mb-12 2xl:mb-14">
                 <button
                   type="button"
                   onClick={() => setPage('home')}
-                  className="inline-flex items-center text-sm text-emerald-300/85 transition hover:-translate-y-0.5 hover:text-emerald-200"
+                  className="inline-flex items-center text-sm text-[var(--accent-green)] transition hover:-translate-y-0.5 hover:text-[var(--accent-green-hover)] lg:text-base 2xl:text-[1.0625rem]"
                   aria-label="Ana sayfaya dön"
                 >
                   <span className="font-mono">{'< cd ..'}</span>
                   <span className="terminal-cursor ml-0.5 font-mono text-white/90">_</span>
                 </button>
               </div>
-              <div className="mb-8 flex items-end justify-between gap-4 border-b border-white/10 pb-5">
+              <div className="mb-8 flex items-end justify-between gap-4 border-b border-white/10 pb-5 lg:mb-10 lg:pb-6 xl:mb-12 xl:pb-7 2xl:mb-14 2xl:pb-8">
                 <div>
-                  <h2 className="text-2xl font-semibold sm:text-4xl">Projeler</h2>
+                  <h2 className="text-2xl font-semibold sm:text-4xl lg:text-[2.5rem] xl:text-5xl 2xl:text-[3.5rem] 2xl:tracking-tight">Projeler</h2>
                 </div>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6 2xl:gap-8">
                 {projects.map((project) => {
                   const Wrapper = project.link ? 'a' : 'div';
                   const wrapperProps = project.link
@@ -362,14 +366,14 @@ function App() {
                             }`}
                           />
                         </div>
-                        <div className="p-5">
-                          <h3 className="text-lg font-semibold">{project.title}</h3>
-                          <p className="mt-2 text-sm leading-6 text-white/65">{project.description}</p>
-                          <div className="mt-4 flex flex-wrap gap-2">
+                        <div className="p-5 sm:p-5 lg:p-6 xl:p-6 2xl:p-7">
+                          <h3 className="text-lg font-semibold sm:text-lg lg:text-xl xl:text-[1.25rem] 2xl:text-[1.375rem]">{project.title}</h3>
+                          <p className="mt-2 text-sm leading-6 text-white/65 sm:mt-2.5 lg:text-base lg:leading-7 xl:mt-3 xl:text-[1rem] 2xl:leading-7 2xl:text-[1.0625rem]">{project.description}</p>
+                          <div className="mt-4 flex flex-wrap gap-2 sm:mt-4 lg:mt-5 lg:gap-2.5 xl:mt-5 2xl:mt-6">
                             {project.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75"
+                                className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75 lg:px-3 lg:py-1.5 lg:text-sm 2xl:text-[0.8125rem]"
                               >
                                 {tag}
                               </span>
@@ -386,23 +390,24 @@ function App() {
         )}
 
         {page === 'games' && (
-          <section id="games" className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
-            <div className="mb-10">
-              <button
-                type="button"
-                onClick={() => setPage('home')}
-                className="inline-flex items-center text-sm text-emerald-300/85 transition hover:-translate-y-0.5 hover:text-emerald-200"
-                aria-label="Ana sayfaya dön"
-              >
-                <span className="font-mono">{'< cd ..'}</span>
-                <span className="terminal-cursor ml-0.5 font-mono text-white/90">_</span>
-              </button>
-            </div>
-            <div className="mb-8 border-b border-white/10 pb-5">
-              <h2 className="text-2xl font-semibold sm:text-4xl">Oyunlar</h2>
-            </div>
+          <section id="games" className="min-h-[80vh] border-b border-white/10 lg:min-h-[85vh] 2xl:min-h-[88vh]">
+            <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:max-w-7xl lg:px-8 lg:py-20 lg:pt-24 xl:px-10 xl:py-24 xl:pt-28 2xl:max-w-[90rem] 2xl:px-12 2xl:py-28 2xl:pt-32">
+              <div className="mb-8 lg:mb-10 xl:mb-12 2xl:mb-14">
+                <button
+                  type="button"
+                  onClick={() => setPage('home')}
+                  className="inline-flex items-center text-sm text-[var(--accent-green)] transition hover:-translate-y-0.5 hover:text-[var(--accent-green-hover)] lg:text-base 2xl:text-[1.0625rem]"
+                  aria-label="Ana sayfaya dön"
+                >
+                  <span className="font-mono">{'< cd ..'}</span>
+                  <span className="terminal-cursor ml-0.5 font-mono text-white/90">_</span>
+                </button>
+              </div>
+              <div className="mb-8 border-b border-white/10 pb-5 lg:mb-10 lg:pb-6 xl:mb-12 xl:pb-7 2xl:mb-14 2xl:pb-8">
+                <h2 className="text-2xl font-semibold sm:text-4xl lg:text-[2.5rem] xl:text-5xl 2xl:text-[3.5rem] 2xl:tracking-tight">Oyunlar</h2>
+              </div>
 
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6 2xl:gap-8">
               {games.map((game) => {
                 const isPlayable = (game as { playable?: boolean }).playable !== false;
                 const CardWrapper = isPlayable ? 'button' : 'div';
@@ -437,28 +442,28 @@ function App() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                       {isPlayable && (
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm">
-                            <Play className="ml-0.5 h-6 w-6 text-white" fill="white" />
+                          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm lg:h-16 lg:w-16 2xl:h-[4.25rem] 2xl:w-[4.25rem]">
+                            <Play className="ml-0.5 h-6 w-6 text-white lg:h-7 lg:w-7 2xl:h-8 2xl:w-8" fill="white" />
                           </div>
                         </div>
                       )}
                     </div>
-                    <div className="p-5">
-                      <div className="mb-2 flex items-center justify-between gap-3">
+                    <div className="p-5 sm:p-5 lg:p-6 xl:p-6 2xl:p-7">
+                      <div className="mb-2 flex items-center justify-between gap-3 sm:mb-2.5 lg:mb-3 2xl:mb-3.5">
                         <div className="flex items-center gap-2 text-white">
-                          <Gamepad2 className="h-4 w-4 text-emerald-300" />
-                          <h3 className="text-lg font-semibold">{game.title}</h3>
+                          <Gamepad2 className="h-4 w-4 shrink-0 text-[var(--accent-green)] lg:h-5 lg:w-5 2xl:h-[1.375rem] 2xl:w-[1.375rem]" />
+                          <h3 className="text-lg font-semibold sm:text-lg lg:text-xl xl:text-[1.25rem] 2xl:text-[1.375rem]">{game.title}</h3>
                         </div>
                         {isPlayable && (
-                          <ExternalLink className="h-4 w-4 shrink-0 text-white/45 transition group-hover:text-white" />
+                          <ExternalLink className="h-4 w-4 shrink-0 text-white/45 transition group-hover:text-white lg:h-5 lg:w-5 2xl:h-5 2xl:w-5" />
                         )}
                       </div>
-                      <p className="text-sm leading-6 text-white/65">{game.description}</p>
-                      <div className="mt-4 flex flex-wrap gap-2">
+                      <p className="text-sm leading-6 text-white/65 lg:text-base lg:leading-7 xl:text-[1rem] 2xl:leading-7 2xl:text-[1.0625rem]">{game.description}</p>
+                      <div className="mt-4 flex flex-wrap gap-2 sm:mt-4 lg:mt-5 lg:gap-2.5 xl:mt-5 2xl:mt-6">
                         {game.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75"
+                            className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75 lg:px-3 lg:py-1.5 lg:text-sm 2xl:text-[0.8125rem]"
                           >
                             {tag}
                           </span>
@@ -468,21 +473,22 @@ function App() {
                   </CardWrapper>
                 );
               })}
+              </div>
             </div>
           </section>
         )}
       </main>
 
       <footer id="contact" className="border-t border-white/10 bg-black">
-        <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6">
+        <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:max-w-7xl lg:px-8 lg:py-16 xl:px-10 xl:py-20 2xl:max-w-[90rem] 2xl:px-12 2xl:py-24">
           <div>
-            <h2 className="text-2xl font-semibold sm:text-3xl">İletişim</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white/60">
+            <h2 className="text-2xl font-semibold sm:text-3xl lg:text-4xl xl:text-[2rem] 2xl:text-[2.25rem]">İletişim</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/60 lg:mt-4 lg:text-base xl:max-w-lg 2xl:text-[1rem]">
               İş birliği, proje geliştirme veya ürün fikirleri için ulaşabilirsin.
             </p>
           </div>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm lg:space-y-4 lg:text-base 2xl:text-[1rem]">
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=aykutk.akkus@gmail.com"
               target="_blank"
