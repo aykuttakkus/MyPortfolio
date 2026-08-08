@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUpRight,
   ExternalLink,
   Gamepad2,
   Github,
-  Instagram,
+  Layers,
   Linkedin,
   Mail,
   MapPin,
-  Phone,
   Play,
   X,
 } from 'lucide-react';
@@ -82,6 +80,14 @@ function MatrixRainHero() {
 
 const projects = [
   {
+    title: 'Calma',
+    description: 'Psikoloji odaklı RAG asistanı. Güvenilir PDF kaynaklarından cevap üretir; hibrit vektör erişimi, kriz tespiti ve oturum kalıcılığı içerir.',
+    image: '/images/Calma.png',
+    tags: ['Python', 'FastAPI', 'RAG', 'React'],
+    imageFit: 'contain' as const,
+    link: 'https://github.com/aykuttakkus/Capstone',
+  },
+  {
     title: 'UFC Website',
     description: 'API odaklı içerik platformu. Veri toplama, backend servisleri ve modern frontend deneyimi.',
     image: 'https://i.imgur.com/aQd979y.png',
@@ -108,12 +114,14 @@ const projects = [
 
 const games = [
   {
-    title: 'Ball Launcher',
-    description: 'Unity ile geliştirilen fizik tabanlı mini WebGL oyun demosu.',
-    demoUrl: '/demos/slingshot/Ball Launcher/index.html',
-    image: 'https://i.imgur.com/x3Qq5k2.png',
-    tags: ['Unity', 'C#', 'WebGL'],
+    title: 'Mahjong Blaze',
+    description: 'Klasik Mahjong mekaniğini modern görsel dille buluşturan mobil strateji oyunu. Geliştirme aşamasında.',
+    image: '/images/Mahjong-Blaze.png',
+    tags: ['Unity', 'C#', 'Mobile'],
     aspectRatio: '16:10' as const,
+    imageFit: 'contain' as const,
+    playable: false,
+    comingSoon: true,
   },
   {
     title: 'Polygon Racer',
@@ -122,6 +130,14 @@ const games = [
     image: 'https://i.imgur.com/bwKwsZh.png',
     tags: ['Unity', 'C#', 'WebGL'],
     aspectRatio: '9:16' as const,
+  },
+  {
+    title: 'Ball Launcher',
+    description: 'Unity ile geliştirilen fizik tabanlı mini WebGL oyun demosu.',
+    demoUrl: '/demos/slingshot/Ball Launcher/index.html',
+    image: 'https://i.imgur.com/x3Qq5k2.png',
+    tags: ['Unity', 'C#', 'WebGL'],
+    aspectRatio: '16:10' as const,
   },
   {
     title: 'HafizAI Game',
@@ -265,16 +281,6 @@ function App() {
               <Linkedin className="h-4 w-4" />
               <span className="hidden sm:inline">LinkedIn</span>
             </a>
-            <a
-              href="https://www.instagram.com/aykuttakkus"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 transition hover:text-white"
-              aria-label="Instagram"
-            >
-              <Instagram className="h-4 w-4" />
-              <span className="hidden sm:inline">Instagram</span>
-            </a>
           </div>
         </nav>
       </header>
@@ -303,9 +309,9 @@ function App() {
                   <button
                     type="button"
                     onClick={() => setPage('projects')}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white px-4 py-2 text-sm font-medium text-black transition duration-200 hover:-translate-y-0.5 hover:bg-white/90"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white transition duration-200 hover:-translate-y-0.5 hover:bg-white/8"
                   >
-                    Projeleri İncele <ArrowUpRight className="h-4 w-4" />
+                    Projeler
                   </button>
                   <button
                     type="button"
@@ -349,38 +355,45 @@ function App() {
                         target: '_blank',
                         rel: 'noopener noreferrer',
                         className:
-                          'group block overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-black/60 transition hover:border-white/25 cursor-pointer',
+                          'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition hover:border-white/25 hover:bg-white/[0.035]',
                       }
-                    : { className: 'group block overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-black/60 transition' };
+                    : { className: 'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition' };
                   return (
                     <Wrapper key={project.title} {...wrapperProps}>
-                      <article className="h-full">
-                        <div className="aspect-[16/10] overflow-hidden border-b border-white/10 bg-black">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className={`h-full w-full opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100 ${
-                              (project as { imageFit?: 'cover' | 'contain' }).imageFit === 'contain'
-                                ? 'object-contain p-2'
-                                : 'object-cover object-top'
-                            }`}
-                          />
-                        </div>
-                        <div className="p-5 sm:p-5 lg:p-6 xl:p-6 2xl:p-7">
-                          <h3 className="text-lg font-semibold sm:text-lg lg:text-xl xl:text-[1.25rem] 2xl:text-[1.375rem]">{project.title}</h3>
-                          <p className="mt-2 text-sm leading-6 text-white/65 sm:mt-2.5 lg:text-base lg:leading-7 xl:mt-3 xl:text-[1rem] 2xl:leading-7 2xl:text-[1.0625rem]">{project.description}</p>
-                          <div className="mt-4 flex flex-wrap gap-2 sm:mt-4 lg:mt-5 lg:gap-2.5 xl:mt-5 2xl:mt-6">
-                            {project.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75 lg:px-3 lg:py-1.5 lg:text-sm 2xl:text-[0.8125rem]"
-                              >
-                                {tag}
-                              </span>
-                            ))}
+                      <div className="aspect-[16/10] relative overflow-hidden border-b border-white/10 bg-black">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className={`h-full w-full bg-black object-center transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95 ${
+                            (project as { imageFit?: 'cover' | 'contain' }).imageFit === 'contain'
+                              ? 'object-contain p-2'
+                              : 'object-cover object-top'
+                          }`}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      </div>
+                      <div className="p-5 sm:p-5 lg:p-6 xl:p-6 2xl:p-7">
+                        <div className="mb-2 flex items-center justify-between gap-3 sm:mb-2.5 lg:mb-3 2xl:mb-3.5">
+                          <div className="flex items-center gap-2 text-white">
+                            <Layers className="h-4 w-4 shrink-0 text-[var(--accent-green)] lg:h-5 lg:w-5 2xl:h-[1.375rem] 2xl:w-[1.375rem]" />
+                            <h3 className="text-lg font-semibold sm:text-lg lg:text-xl xl:text-[1.25rem] 2xl:text-[1.375rem]">{project.title}</h3>
                           </div>
+                          {project.link && (
+                            <ExternalLink className="h-4 w-4 shrink-0 text-white/45 transition group-hover:text-white lg:h-5 lg:w-5 2xl:h-5 2xl:w-5" />
+                          )}
                         </div>
-                      </article>
+                        <p className="text-sm leading-6 text-white/65 lg:text-base lg:leading-7 xl:text-[1rem] 2xl:leading-7 2xl:text-[1.0625rem]">{project.description}</p>
+                        <div className="mt-4 flex flex-wrap gap-2 sm:mt-4 lg:mt-5 lg:gap-2.5 xl:mt-5 2xl:mt-6">
+                          {project.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-white/75 lg:px-3 lg:py-1.5 lg:text-sm 2xl:text-[0.8125rem]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </Wrapper>
                   );
                 })}
@@ -410,6 +423,7 @@ function App() {
               <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6 2xl:gap-8">
               {games.map((game) => {
                 const isPlayable = (game as { playable?: boolean }).playable !== false;
+                const isComingSoon = (game as { comingSoon?: boolean }).comingSoon === true;
                 const CardWrapper = isPlayable ? 'button' : 'div';
                 const cardProps = isPlayable
                   ? {
@@ -424,8 +438,9 @@ function App() {
                         'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition hover:border-white/25 hover:bg-white/[0.035]',
                     }
                   : {
-                      className:
-                        'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition',
+                      className: isComingSoon
+                        ? 'group overflow-hidden rounded-2xl border border-[var(--accent-green)]/20 bg-white/[0.02] text-left transition hover:border-[var(--accent-green)]/40'
+                        : 'group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] text-left transition',
                     };
                 return (
                   <CardWrapper key={game.title} {...cardProps}>
@@ -434,12 +449,22 @@ function App() {
                         src={game.image}
                         alt={game.title}
                         className={`h-full w-full bg-black object-center transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95 ${
+                          isComingSoon ? 'opacity-40 blur-[2px]' : ''
+                        } ${
                           game.aspectRatio === '9:16' || (game as { imageFit?: string }).imageFit === 'contain'
                             ? 'object-contain p-2'
                             : 'object-cover'
                         }`}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      {isComingSoon && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                          <span className="animate-pulse rounded-full border border-[var(--accent-green)]/60 bg-[var(--accent-green)]/10 px-5 py-2 text-xs font-semibold tracking-[0.25em] text-[var(--accent-green)] shadow-[0_0_18px_rgba(34,197,94,0.25)]">
+                            YAKINDA
+                          </span>
+                          <p className="text-[11px] tracking-widest text-white/35 uppercase">Geliştirme aşamasında</p>
+                        </div>
+                      )}
                       {isPlayable && (
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
                           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm lg:h-16 lg:w-16 2xl:h-[4.25rem] 2xl:w-[4.25rem]">
@@ -497,15 +522,6 @@ function App() {
             >
               <Mail className="h-4 w-4 shrink-0" />
               <span>aykutk.akkus@gmail.com</span>
-            </a>
-            <a
-              href="https://wa.me/905352788078"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 text-white/70 transition hover:text-white"
-            >
-              <Phone className="h-4 w-4 shrink-0" />
-              <span>+90 535 278 80 78</span>
             </a>
             <div className="flex items-center gap-3 text-white/85">
               <MapPin className="h-4 w-4 text-white/55" />
